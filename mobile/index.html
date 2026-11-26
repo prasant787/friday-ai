@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FRIDAY AI</title>
+  <style>
+    body {
+      margin: 0;
+      background: #101827;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #17243a;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      color: #00d9ff;
+    }
+    #chat {
+      padding: 15px;
+      height: 65vh;
+      overflow-y: auto;
+    }
+    .message {
+      background: #20334d;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+    .input-area {
+      display: flex;
+      padding: 12px;
+      gap: 8px;
+    }
+    input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #00bde8;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>FRIDAY AI</header>
+
+<div id="chat">
+  <div class="message">
+    Hello Boss! I am FRIDAY. How can I help you?
+  </div>
+</div>
+
+<div class="input-area">
+  <input id="message" placeholder="Message FRIDAY...">
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+async function sendMessage() {
+  const input = document.getElementById("message");
+  const chat = document.getElementById("chat");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  chat.innerHTML += `<div class="message">You: ${escapeHTML(text)}</div>`;
+  input.value = "";
+
+  try {
+    const response = await fetch(
+      "https://friday-ai-xr7i.onrender.com/chat",
+      {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: text})
+      }
+    );
+
+    const data = await response.json();
+    chat.innerHTML += `<div class="message">FRIDAY: ${escapeHTML(data.response || data.message || "No reply received.")}</div>`;
+  } catch (error) {
+    chat.innerHTML += `<div class="message">FRIDAY: Connection error. Please try again.</div>`;
+  }
+
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function escapeHTML(text) {
+  return text.replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+</script>
+
+</body>
+  </html>
