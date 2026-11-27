@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 app = Flask("FRIDAY")
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 
 SYSTEM_INSTRUCTION = """
 You are FRIDAY, a personal AI assistant.
